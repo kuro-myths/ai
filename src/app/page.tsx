@@ -18,7 +18,7 @@ export default function Home() {
 
   useEffect(() => {
     fetch("/api/models").then(r => r.json()).then(d => {
-      if (Array.isArray(d.models)) { setModels(d.models); setModel(d.models[0]?.id ?? ""); }
+      if (Array.isArray(d.models)) { setModels(d.models); setModel(d.defaultModel || d.models[0]?.id || ""); }
       if (d.error) setError(d.error);
     }).catch(() => setError("Tidak dapat memuat model. Periksa konfigurasi 9Router."));
   }, []);
