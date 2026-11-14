@@ -74,7 +74,7 @@ export default function Home() {
           <button onClick={() => setInput("Bantu saya menulis dan memperbaiki kode.")}>Write some code <span>↗</span></button>
           <button onClick={() => setInput("Buatkan rencana proyek yang terstruktur.")}>Plan a project <span>↗</span></button>
         </div></div> : <div className="message-list">
-          {messages.map((m,i) => <article className={\`message \${m.role}\`} key={i}><div className="message-avatar">{m.role === "assistant" ? <span>✳</span> : <User size={16}/>}</div><div className="message-content"><div className="message-author">{m.role === "assistant" ? "Kuro AI" : "You"}</div><div className="message-text">{m.content || (loading && i === messages.length-1 ? <span className="typing">Thinking…</span> : "")}</div></div></article>)}
+          {messages.map((m,i) => <article className={"message " + m.role} key={i}><div className="message-avatar">{m.role === "assistant" ? <span>✳</span> : <User size={16}/>}</div><div className="message-content"><div className="message-author">{m.role === "assistant" ? "Kuro AI" : "You"}</div><div className="message-text">{m.content || (loading && i === messages.length-1 ? <span className="typing">Thinking…</span> : "")}</div></div></article>)}
           <div ref={endRef}/>
         </div>}
       </div>
