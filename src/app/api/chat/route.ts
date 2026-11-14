@@ -12,13 +12,16 @@ export async function POST(req: NextRequest) {
     if (!Array.isArray(body.messages) || typeof body.model !== "string" || !body.model) {
       return NextResponse.json({ error: "Model dan messages wajib diisi." }, { status: 400 });
     }
-    const upstream = await fetch(\`\${base.replace(/\/$/, "")}/chat/completions\`, {
+    const endpoint = base.replace(/\/$/, "") + "/chat/completions";
+    const upstream = await fetch(endpoint, {
       method: "POST",
-      headers: { "Content-Type": "application/json", Authorization: \`Bearer \${key}\` },
+      headers: { "Content-Type": "application/json", Authorization: "Bearer " + key },
       body: JSON.stringify({ model: body.model, messages: body.messages, stream: true }),
       signal: req.signal,
     });
-    if (!upstream.ok || !upstream.body) return NextResponse.json({ error: \`Permintaan ke 9Router gagal (HTTP \${upstream.status}).\` }, { status: upstream.status || 502 });
+    if (!upstream.ok || !upstream.body) {
+      return NextResponse.json({ error: "Permintaan ke 9Router gagal (HTTP " + upstream.status + ")." }, { status: upstream.status || 502 });
+    }
     const stream = new ReadableStream<Uint8Array>({
       async start(controller) {
         const reader = upstream.body!.getReader();
@@ -26,9 +29,9 @@ export async function POST(req: NextRequest) {
         let buffer = "";
         try {
           while (true) {
-            const { value, done } = await reader.read();
-            if (done) break;
-            buffer += decoder.decode(value, { stream: true });
+            const part = await reader.read();
+            if (part.done) break;
+            buffer += decoder.decode(part.value, { stream: true });
             const lines = buffer.split("\n");
             buffer = lines.pop() ?? "";
             for (const line of lines) {
@@ -37,8 +40,8 @@ export async function POST(req: NextRequest) {
               if (!payload || payload === "[DONE]") continue;
               try {
                 const parsed = JSON.parse(payload);
-                const content = parsed.choices?.[0]?.delta?.content;
-                if (typeof content === "string") controller.enqueue(new TextEncoder().encode(content));
+                const value = parsed.choices?.[0]?.delta?.content;
+                if (typeof value === "string") controller.enqueue(new TextEncoder().encode(value));
               } catch { /* Ignore malformed SSE frames. */ }
             }
           }
@@ -46,7 +49,9 @@ export async function POST(req: NextRequest) {
         } catch (error) { controller.error(error); }
       },
     });
-    return new Response(stream, { headers: { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "no-cache, no-transform", "X-Content-Type-Options": "nosniff" } });
+    return new Response(stream, {
+      headers: { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "no-cache, no-transform", "X-Content-Type-Options": "nosniff" },
+    });
   } catch {
     return NextResponse.json({ error: "Gagal memproses permintaan chat." }, { status: 500 });
   }
