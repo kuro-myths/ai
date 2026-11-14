@@ -40,11 +40,10 @@ npm run dev
 - GitHub Actions runs TypeScript checks and a production build for pushes and pull requests to `main`.
 - To pull the latest application source into an existing Codespace:
 ```bash
-git pull origin main
-npm install
+npm run update
 npm run dev
 ```
-Review and merge Dependabot pull requests to apply dependency updates. Source updates committed to `main` are available through `git pull`; they are not silently installed into an already-running Codespace. Restart the dev server after pulling changes.
+Review and merge Dependabot pull requests to apply dependency updates. Source updates committed to `main` are available through `npm run update`; they are not silently installed into an already-running Codespace. Restart the dev server after pulling changes.
 
 ## Environment variables
 | Variable | Description |
