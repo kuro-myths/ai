@@ -57,3 +57,7 @@ Never commit `.env.local` or expose the API key in browser code.
 ## Current implementation
 Included: Claude-inspired responsive chat layout, automatic model discovery from `/models`, model selection, and server-side streaming proxy to `/chat/completions`.
 Not yet implemented: persistent chat history, Projects, file upload, Artifacts, MCP integrations, web search and autonomous coding tools. These require additional modules and testing.
+
+
+## Automatic MP4 Video Studio
+Open `/video-studio` or choose **Video Studio** in the chat sidebar. Enter a topic or script, choose a visual theme and duration, then create an animated 16:9 video. The browser records the animation and FFmpeg.wasm converts it to H.264 MP4 locally; no server-side video API key is needed. The first export downloads the FFmpeg WebAssembly core from jsDelivr, so an internet connection is required. Use a current Chrome or Edge browser. This initial version creates animated text/storyboard videos; generative footage, voice-over, uploaded assets, and AI-generated scene images are future integrations.
