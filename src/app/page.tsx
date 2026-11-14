@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { ArrowUp, Paperclip, PanelLeftClose, Search, Settings2, Sparkles, SquarePen, Menu, ChevronDown, User, Square } from "lucide-react";
+import { ArrowUp, Paperclip, PanelLeftClose, Search, Settings2, Sparkles, SquarePen, Menu, ChevronDown, User, Square, Film } from "lucide-react";
 
 type Message = { role: "user" | "assistant"; content: string };
 type Model = { id: string; name?: string };
@@ -57,7 +57,7 @@ export default function Home() {
     {sidebar && <aside className="sidebar">
       <div className="brand-row"><div className="brand-mark">✳</div><span>Kuro AI</span><button className="icon-btn side-collapse" onClick={() => setSidebar(false)} aria-label="Tutup sidebar"><PanelLeftClose size={18}/></button></div>
       <button className="side-action active" onClick={() => setMessages([])}><SquarePen size={17}/> New chat</button>
-      <button className="side-action"><Search size={17}/> Search</button><button className="side-action"><Sparkles size={17}/> Projects</button>
+      <button className="side-action"><Search size={17}/> Search</button><button className="side-action"><Sparkles size={17}/> Projects</button><button className="side-action" onClick={() => { window.location.href = "/video-studio"; }}><Film size={17}/> Video Studio</button>
       <div className="side-label">RECENT</div>
       {messages.length > 0 ? <button className="history-item">Percakapan baru</button> : <p className="empty-history">Percakapanmu akan muncul di sini.</p>}
       <div className="sidebar-bottom"><button className="side-action"><Settings2 size={17}/> Settings</button><div className="profile"><div className="avatar">K</div><div><strong>Kuro</strong><small>Personal workspace</small></div></div></div>
