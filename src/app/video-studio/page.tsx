@@ -144,7 +144,7 @@ export default function VideoStudioPage() {
       await ffmpeg.writeFile("kuro-video.webm", new Uint8Array(await webm.arrayBuffer()));
       await ffmpeg.exec(["-i", "kuro-video.webm", "-c:v", "libx264", "-preset", "ultrafast", "-pix_fmt", "yuv420p", "-movflags", "+faststart", "-r", String(fps), "kuro-video.mp4"]);
       const output = await ffmpeg.readFile("kuro-video.mp4");
-      const blob = new Blob([output], { type: "video/mp4" });
+      const blob = new Blob([new Uint8Array(output).buffer as ArrayBuffer], { type: "video/mp4" });
       const url = URL.createObjectURL(blob);
       setVideoUrl(url);
       const name = "kuro-ai-video-" + new Date().toISOString().slice(0, 10) + ".mp4";
